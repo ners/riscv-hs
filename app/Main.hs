@@ -1,8 +1,11 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+
 module Main where
 
-import qualified MyLib (someFunc)
+import Prelude (IO, print)
+
+import Bits
 
 main :: IO ()
 main = do
-  putStrLn "Hello, Haskell!"
-  MyLib.someFunc
+  print (not I)
