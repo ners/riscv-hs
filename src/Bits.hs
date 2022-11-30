@@ -31,3 +31,8 @@ nor x y = not (or x y)
 
 xnor :: Bit -> Bit -> Bit
 xnor x y = not (xor x y)
+
+implies :: Bit -> Bit -> Bit
+implies I I = I
+implies I O = O
+implies O _ = I
