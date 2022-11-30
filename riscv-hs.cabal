@@ -47,4 +47,6 @@ test-suite riscv-hs-test
     main-is:          Main.hs
     build-depends:
         base,
-        riscv-hs
+        riscv-hs,
+        hspec,
+        QuickCheck
