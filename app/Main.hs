@@ -7,5 +7,4 @@ import Prelude (IO, print, (==))
 import Bits
 
 main :: IO ()
-main = do
-  print (nor I I == O) -- should print true
+main = print (nor I I == O) -- should print true
