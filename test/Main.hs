@@ -22,7 +22,7 @@ testAnd a b
 
 testImplies :: Bit -> Bit -> Expectation
 testImplies a b
-  | a == I && b == O = implies a b `shouldBe` O
+  | a == I = implies a b `shouldBe` b
   | otherwise = implies a b `shouldBe` I
 
 main :: IO ()
