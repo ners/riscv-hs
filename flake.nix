@@ -15,9 +15,7 @@
       haskellDeps = drv: with builtins; concatLists (attrValues drv.getCabalDeps);
     in
     {
-      packages = pkgs // {
-        inherit haskellPackages;
-      };
+      packages.default = haskellPackages.riscv-hs;
       devShells.default = pkgs.mkShell {
         buildInputs = [
           (haskellPackages.ghcWithPackages (ps: haskellDeps ps.riscv-hs))
