@@ -6,29 +6,23 @@
 
   outputs = inputs: inputs.flake-utils.lib.eachSystem [ "x86_64-linux" "x86_64-darwin" ] (system:
     let
-      mob-overlay = self: super: {
-        mob = super.mob.overrideAttrs (old: rec {
-          version = "4.0.0";
-
-          src = super.fetchFromGitHub {
-            owner = "remotemobprogramming";
-            repo = old.pname;
-            rev = "v${version}";
-            sha256 = "sha256-c6Feex0FGxxOWBEHxe0GqPHv65EwMMdxIeehZUGbl0Q=";
-          };
-        });
+      pkgs = import inputs.nixpkgs { system = system; overlays = [ ]; };
+      haskellPackages = pkgs.haskell.packages.ghc92.override {
+        overrides = self: super: {
+          riscv-hs = self.callCabal2nix "risv-hs" ./. { };
+        };
       };
-      pkgs = import inputs.nixpkgs { system = system; overlays = [ mob-overlay ]; };
-      haskellPackages = pkgs.haskell.packages.ghc92;
+      haskellDeps = drv: with builtins; concatLists (attrValues drv.getCabalDeps);
     in
     {
+      packages.default = haskellPackages.riscv-hs;
       devShells.default = pkgs.mkShell {
-        buildInputs = [
-          pkgs.mob
-          haskellPackages.ghc
-          haskellPackages.cabal-install
-          haskellPackages.haskell-language-server
+        buildInputs = with haskellPackages; [
+          (ghcWithPackages (ps: haskellDeps ps.riscv-hs))
+          cabal-install
+          haskell-language-server
         ];
       };
-    });
+    }
+  );
 }
