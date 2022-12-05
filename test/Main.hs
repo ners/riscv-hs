@@ -62,7 +62,7 @@ main = do
       it "should not have the same output as the input" $
         property testNotDifference
     describe "Binary AND function" $ do
-      it "returns the input value if both are the same" $
+      it "returns 'I' if both inputs are 'I'" $
         property testAnd
     describe "Binary OR function" $ do
       it "returns 'I' if at least one input is 'I'" $
