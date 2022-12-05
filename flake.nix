@@ -17,10 +17,10 @@
     {
       packages.default = haskellPackages.riscv-hs;
       devShells.default = pkgs.mkShell {
-        buildInputs = [
-          (haskellPackages.ghcWithPackages (ps: haskellDeps ps.riscv-hs))
-          haskellPackages.cabal-install
-          haskellPackages.haskell-language-server
+        buildInputs = with haskellPackages; [
+          (ghcWithPackages (ps: haskellDeps ps.riscv-hs))
+          cabal-install
+          haskell-language-server
         ];
       };
     }
