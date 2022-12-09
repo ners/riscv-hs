@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Adders
 import Bits
 import Control.Monad
 import Test.Hspec
@@ -52,7 +53,22 @@ testImplies :: Bit -> Bit -> Expectation
 testImplies a b
   | a == I = implies a b `shouldBe` b
   | otherwise = implies a b `shouldBe` I
-  
+
+testHalfAdder :: Bit -> Bit -> Expectation
+testHalfAdder a b
+  | a == I && b == I = halfAdder a b `shouldBe` (O, I)
+  | a == O && b == O = halfAdder a b `shouldBe` (O, O)
+  | otherwise = halfAdder a b `shouldBe` (I, O)
+
+testFullAdder :: Bit -> Bit -> Bit -> Expectation
+testFullAdder a b c
+  | a == I && b == I && c == I = fullAdder a b c `shouldBe` (I, I)
+  | a == I && b == I && c == O = fullAdder a b c `shouldBe` (O, I)
+  | a == I && b == O && c == I = fullAdder a b c `shouldBe` (O, I)
+  | a == O && b == I && c == I = fullAdder a b c `shouldBe` (O, I)
+  | a == O && b == O && c == O = fullAdder a b c `shouldBe` (O, O)
+  | otherwise = fullAdder a b c `shouldBe` (I, O)
+
 main :: IO ()
 main = do
   hspec $ do
@@ -82,3 +98,9 @@ main = do
     describe "Binary IMPLIES function" $ do
       it "returns I unless input values are I O in that order" $
         property testImplies
+    describe "Half adder" $ do
+      it "adds two input bits, returning a sum and a carry bit" $
+        property testHalfAdder
+    describe "Full adder" $ do
+      it "adds three input bits, returning a sum and a carry bit" $
+        property testFullAdder
