@@ -20,8 +20,9 @@ A possible outcome would be an emulator that can run RV32I assembly.
 - The structure of the project is dictated by the tools we are using, namely Nix and Cabal. This repository is both a Nix flake and a Cabal package and as such contains the following folders/files:
   - app/
     - Main.hs: Haskell source for an executable that is built and run by 'cabal run'. It does not do anything meaningful at the moment.
-  - src/
-    - Bits.hs: Haskell library that provides the 'Bits' module.
+  - src/ - Haskell library folder
+    - Adders.hs: Module containing half and full adder functions.
+    - Bits.hs: Module containing the 'Bit' data type and some functions for boolean operations on bits.
   - test/
     - Main.hs: Haskell source for an executable that is built and run by 'cabal test', used to test the functions defined in 'src/Bits.hs'
   - CHANGELOG.md: This file will only become relevant in case of a release.
