@@ -4,7 +4,7 @@ module Main where
 
 import Prelude (IO, print, (==))
 
-import Bits
+import Bit
 
 main :: IO ()
 main = print (nor I I == O) -- should print true

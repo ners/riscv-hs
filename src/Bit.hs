@@ -1,6 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
-module Bits where
+module Bit where
 
 import Prelude (Eq, Show, otherwise, (==))
 

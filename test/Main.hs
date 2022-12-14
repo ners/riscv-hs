@@ -1,7 +1,7 @@
 module Main (main) where
 
 import Adders
-import Bits
+import Bit
 import Control.Monad
 import Test.Hspec
 import Test.QuickCheck
