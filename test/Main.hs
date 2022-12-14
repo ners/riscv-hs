@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Bits
+import Bit
 import Control.Monad
 import Test.Hspec
 import Test.QuickCheck
