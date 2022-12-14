@@ -22,11 +22,12 @@ A possible outcome would be an emulator that can run RV32I assembly.
   - [`src/`](/src): Haskell library folder, each file inside is a Haskell module providing functions-
   - [`test/`](/test) : Contains Haskell source for an executable that is built and run by `cabal test`, used to test the functions defined in `src/`.
   - [`CHANGELOG.md`](CHANGELOG.md): This file will only become relevant in case of a release.
-  - [`flake.nix`](flake.nix): This is a [Nix flake](https://nixos.wiki/wiki/Flakes) providing dependencies for the project, namely GHC and Cabal, for Linux and MacOS/Darwin on x86_64.
-  - [`flake.lock`](flake.lock): File automatically created by Nix that does not need to be touched.
+  - [`flake.nix`](flake.nix): This is a [Nix flake](https://nixos.wiki/wiki/Flakes) providing dependencies for the project, namely GHC and Cabal.
+  - [`flake.lock`](flake.lock): File specifying the exact versions of dependencies, created by the [`nix flake lock`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake-lock.html) command. 
   - [`LICENSE`](LICENSE): The Apache 2.0 license.
   - [`riscvs-hs.cabal`](riscvs-hs.cabal): Cabal [package description](https://cabal.readthedocs.io/en/3.4/cabal-package.html).
-  - [`shell.nix`](shell.nix): For compatibility with non-flake-enabled Nix versions.
+  - [`shell.nix`](shell.nix): For compatibility with non-flake-enabled Nix versions and tools requiring .nix files, such as the [Nix environment selector](https://github.com/arrterian/nix-env-selector) plugin for VSCode.
+
 # References
 
 [The RISC-V Instruction Set Manual](https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf)
