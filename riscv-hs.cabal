@@ -18,7 +18,7 @@ common warnings
 
 library
     import:           warnings
-    exposed-modules:  Bit, Adders
+    exposed-modules:  Bit, Adders, FixedVector
     -- other-modules:
     -- other-extensions:
     build-depends:    base
