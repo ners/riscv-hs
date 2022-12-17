@@ -54,8 +54,8 @@ testImplies a b
   | a == I = implies a b `shouldBe` b
   | otherwise = implies a b `shouldBe` I
 
-comHalfAdder :: Bit -> Bit -> Expectation
-comHalfAdder a b = halfAdder a b `shouldBe` halfAdder b a
+testHalfAdderCommutative :: Bit -> Bit -> Expectation
+testHalfAdderCommutative a b = halfAdder a b `shouldBe` halfAdder b a
 
 idHalfAdder :: Bit -> Bit -> Expectation
 idHalfAdder a b
