@@ -22,7 +22,7 @@ A possible outcome would be an emulator that can run RV32I assembly.
   - [`src/`](/src): Haskell library folder, each file inside is a Haskell module.
   - [`test/`](/test): Haskell source code for an executable that is built and run by `cabal test`, used to test the functions defined in `src/`.
   - [`CHANGELOG.md`](CHANGELOG.md): This file will only become relevant in case of a release.
-  - [`flake.nix`](flake.nix): This is a [Nix flake](https://nixos.wiki/wiki/Flakes) providing dependencies for the project, namely GHC and Cabal.
+  - [`flake.nix`](flake.nix): This is a [Nix flake](https://nixos.wiki/wiki/Flakes) providing dependencies for the project.
   - [`flake.lock`](flake.lock): File specifying the exact versions of dependencies, created by the [`nix flake lock`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake-lock.html) command. 
   - [`LICENSE`](LICENSE): The Apache 2.0 license.
   - [`riscvs-hs.cabal`](riscvs-hs.cabal): Cabal [package description](https://cabal.readthedocs.io/en/3.4/cabal-package.html).
