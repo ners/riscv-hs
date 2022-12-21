@@ -57,16 +57,16 @@ testImplies a b
 testHalfAdderCommutative :: Bit -> Bit -> Expectation
 testHalfAdderCommutative a b = halfAdder a b `shouldBe` halfAdder b a
 
-idHalfAdder :: Bit -> Bit -> Expectation
-idHalfAdder a b
+testHalfAdderIdentity :: Bit -> Bit -> Expectation
+testHalfAdderIdentity a b
   | b == O = halfAdder a b `shouldBe` (a, b)
   | otherwise = halfAdder a b `shouldNotBe` (a, b)
 
-comFullAdder :: Bit -> Bit -> Bit -> Expectation
-comFullAdder a b c = fullAdder a b c `shouldBe` fullAdder c b a
+testFullAdderCommutative :: Bit -> Bit -> Bit -> Expectation
+testFullAdderCommutative a b c = fullAdder a b c `shouldBe` fullAdder c a b
 
-carryFullAdder :: Bit -> Bit -> Bit -> Expectation
-carryFullAdder a b c
+testFullAdderCarry :: Bit -> Bit -> Bit -> Expectation
+testFullAdderCarry a b c
   | c == O = fullAdder a b c `shouldBe` halfAdder a b
   | otherwise = fullAdder a b c `shouldNotBe` halfAdder a b
 
@@ -101,11 +101,11 @@ main = do
         property testImplies
     describe "Binary half adder" $ do
       it "changing the order of inputs does not change the result" $
-        property comHalfAdder
+        property testHalfAdderCommutative
       it "if O is added the result is identical to the input" $
-        property idHalfAdder
+        property testHalfAdderIdentity
     describe "Binary full adder" $ do
       it "changing the order of inputs does not affect the result" $
-        property comFullAdder
+        property testFullAdderCommutative
       it "if the carry bit is O it behaves like a half adder" $
-        property carryFullAdder
+        property testFullAdderCarry
