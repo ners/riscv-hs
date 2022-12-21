@@ -18,7 +18,7 @@ A possible outcome would be an emulator that can run RV32I assembly.
 
 # Project structure
 - The structure of the project is dictated by the tools we are using, namely Nix and Cabal. This repository is both a Nix flake and a Cabal package and as such contains the following folders/files:
-  - [`app/`](/app): Contains Haskell source for an executable that can be built and run by `cabal run`. It does not do anything meaningful at the moment.
+  - [`app/`](/app): Haskell source code for an executable that can be built and run by `cabal run`.
   - [`src/`](/src): Haskell library folder, each file inside is a Haskell module providing functions-
   - [`test/`](/test) : Contains Haskell source for an executable that is built and run by `cabal test`, used to test the functions defined in `src/`.
   - [`CHANGELOG.md`](CHANGELOG.md): This file will only become relevant in case of a release.
