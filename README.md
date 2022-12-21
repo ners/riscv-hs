@@ -26,7 +26,10 @@ A possible outcome would be an emulator that can run RV32I assembly.
   - [`flake.lock`](flake.lock): File specifying the exact versions of dependencies, created by the [`nix flake lock`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake-lock.html) command. 
   - [`LICENSE`](LICENSE): The Apache 2.0 license.
   - [`riscvs-hs.cabal`](riscvs-hs.cabal): Cabal [package description](https://cabal.readthedocs.io/en/3.4/cabal-package.html).
-  - [`shell.nix`](shell.nix): For compatibility with non-flake-enabled Nix versions and tools requiring .nix files, such as the [Nix environment selector](https://github.com/arrterian/nix-env-selector) plugin for VSCode.
+  - [`shell.nix`](shell.nix): For compatibility with Nix without flakes as well as other tools.
+
+# Notes
+- If you're using VSCode, you can use [Nix environment selector](https://github.com/arrterian/nix-env-selector) to connect it with the Nix shell.
 
 # References
 
