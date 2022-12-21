@@ -23,6 +23,7 @@
           haskell-language-server
         ];
       };
+      devShell = inputs.self.devShells.${system}.default;
     }
   );
 }
