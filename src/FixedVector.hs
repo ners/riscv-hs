@@ -6,7 +6,7 @@
 
 module FixedVector where
 
-import Prelude (Show, (++), ($), Int, pure, (<$>))
+import Prelude (Show, (++), ($), Int, pure, (<$>), error, show, Integral, fromIntegral)
 
 import GHC.TypeLits
 import Language.Haskell.TH.Lib
@@ -28,13 +28,35 @@ singleton v = FixedVector { _data = [v] }
 prepend :: KnownNat n => t -> FixedVector t n -> FixedVector t (1+n)
 prepend a b = singleton a ++# b
 
-createVector :: Int -> DecsQ
-createVector n = pure
-  [ FunD name [ Clause [ConP name [] (VarP v <$> [1..n])] (NormalB )]
+createVectorN :: (Integral n, Show n) => n -> DecsQ
+createVectorN n = pure
+  [ SigD functionName type'
+  , FunD functionName clauses
   ]
   where
-    name = mkName $ "createVector" ++ show n
-    v n = mkName $ "v" ++ show n
+    -- here we have access to n from `createVector``
+    -- the name of the function we are creating
+    functionName :: Name
+    functionName = mkName $ "createVector" ++ show n
+
+    -- The type of elements stored in our vector, which we denote as `t`
+    vectorElementType :: Type
+    vectorElementType = VarT $ mkName "t"
+
+    -- ''FixedVector is the Name of the concrete type FixedVector
+    -- t -> t -> ... -> t -> t -> FixedVector t n
+    returnType :: Type
+    returnType = ConT ''FixedVector `AppT` vectorElementType `AppT` LitT (NumTyLit $ fromIntegral n)
+    -- alternatively, equivalent:
+    -- returnType = AppT (AppT (ConT ''FixedVector) vectorElementType) (LitT $ NumTyLit n)
+    -- returnType = foldr1 (AppT) [ConT ''FixedVector, vectorElementType, LitT (NumTyLit n)]
+
+    type' :: Type
+    type' = error "Not implemented yet"
+
+    clauses :: [Clause]
+    clauses = error "Not implemented yet"
+
 
 createVector0 :: FixedVector t 0
 createVector0 = empty
@@ -50,3 +72,6 @@ createVector3 v1 v2 v3 = prepend v1 $ createVector2 v2 v3
 
 createVector4 :: t -> t -> t -> t -> FixedVector t 4
 createVector4 v1 v2 v3 v4 = prepend v1 $ createVector3 v2 v3 v4
+
+-- dec SIGNATURE: NAME TYPE(t -> t -> t -> t -> FixedVector t 4)
+-- dec FUNCTION:  NAME PARAMETERS(v1 v2 v3 v4) = BODY(prepend v1 $ createVector3 v2 v3 v4)
