@@ -1,12 +1,9 @@
-{-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DatatypeContexts #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module FixedVector where
-
-import Prelude (Show, (++), ($), Int, pure, (<$>), error, show, Integral, fromIntegral)
 
 import GHC.TypeLits
 import Language.Haskell.TH.Lib
@@ -22,15 +19,22 @@ empty = FixedVector { _data = [] }
 singleton :: t -> FixedVector t 1
 singleton v = FixedVector { _data = [v] }
 
-(++#) :: (KnownNat m, KnownNat n) => FixedVector t m -> FixedVector t n -> FixedVector t (m+n)
+(++#)
+  :: KnownNat m
+  => KnownNat n
+  => FixedVector t m
+  -> FixedVector t n
+  -> FixedVector t (m+n)
 (++#) a b = FixedVector { _data = _data a ++ _data b }
 
 prepend :: KnownNat n => t -> FixedVector t n -> FixedVector t (1+n)
 prepend a b = singleton a ++# b
 
+-- create a function that we would have written as follows:
+-- createVector<N> :: t -> t -> {N times} -> t -> FixedVector t <N>
 createVectorN :: (Integral n, Show n) => n -> DecsQ
 createVectorN n = pure
-  [ SigD functionName type'
+  [ SigD functionName functionType
   , FunD functionName clauses
   ]
   where
@@ -44,19 +48,34 @@ createVectorN n = pure
     vectorElementType = VarT $ mkName "t"
 
     -- ''FixedVector is the Name of the concrete type FixedVector
-    -- t -> t -> ... -> t -> t -> FixedVector t n
     returnType :: Type
     returnType = ConT ''FixedVector `AppT` vectorElementType `AppT` LitT (NumTyLit $ fromIntegral n)
     -- alternatively, equivalent:
     -- returnType = AppT (AppT (ConT ''FixedVector) vectorElementType) (LitT $ NumTyLit n)
     -- returnType = foldr1 (AppT) [ConT ''FixedVector, vectorElementType, LitT (NumTyLit n)]
 
-    type' :: Type
-    type' = error "Not implemented yet"
+    -- t -> t -> ... -> t -> t -> FixedVector t n
+    -- vectorElementType -> vectorElementType -> ... -> returnType
+    -- AppT vectorElementType (AppT ArrowT (AppT vectorElementType (AppT ArrowT returnType)))
+    -- 0th :: returnType
+    -- 1st :: AppT vectorElementType (AppT ArrowT returnType)
+    -- 2nd :: AppT vectorElementType (AppT ArrowT (AppT (vectorElementType) (AppT ArrowT returnType)))
+    -- 3rd :: AppT vectorElementType (AppT ArrowT (AppT vectorElementType (AppT ArrowT (AppT (vectorElementType) (AppT ArrowT returnType)))))
+    -- ... (really boring)
+    -- nth is what we need!
+    functionType :: Type
+    functionType = iterate f returnType !! fromIntegral n
+      where f = AppT vectorElementType . AppT ArrowT
 
+    -- Documentation:
+    -- https://hackage.haskell.org/package/template-haskell-2.19.0.0/docs/Language-Haskell-TH.html#t:Clause
     clauses :: [Clause]
-    clauses = error "Not implemented yet"
-
+    clauses = [Clause pats body []]
+      where
+        -- TODO: thies
+        pats = [error "Not implemented yet!"]
+        -- TODO: gennadi
+        body = error "Not implemented yet!"
 
 createVector0 :: FixedVector t 0
 createVector0 = empty
