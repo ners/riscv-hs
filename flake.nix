@@ -12,13 +12,12 @@
           riscv-hs = self.callCabal2nix "risv-hs" ./. { };
         };
       };
-      haskellDeps = drv: with builtins; concatLists (attrValues drv.getCabalDeps);
     in
     {
       packages.default = haskellPackages.riscv-hs;
-      devShells.default = pkgs.mkShell {
+      devShells.default = haskellPackages.shellFor {
+        packages = ps: [ ps.riscv-hs ];
         buildInputs = with haskellPackages; [
-          (ghcWithPackages (ps: haskellDeps ps.riscv-hs))
           cabal-install
           haskell-language-server
         ];
