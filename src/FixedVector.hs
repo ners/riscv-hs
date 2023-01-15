@@ -75,7 +75,8 @@ createVectorN n = pure
         -- TODO: thies
         pats = [error "Not implemented yet!"]
         -- TODO: gennadi
-        body = error "Not implemented yet!"
+        body = NormalB $ RecConE ''FixedVector [('_data, ListE (map VarE vectorElements))]
+        vectorElements = map (mkName . ("x" ++) . show) [1..n]
 
 createVector0 :: FixedVector t 0
 createVector0 = empty
