@@ -72,11 +72,9 @@ createVectorN n = pure
     clauses :: [Clause]
     clauses = [Clause pats body []]
       where
-        -- TODO: thies
-        pats = [error "Not implemented yet!"]
-        -- TODO: gennadi
+        pats = map VarP vectorElements 
         body = NormalB $ RecConE ''FixedVector [('_data, ListE (map VarE vectorElements))]
-        vectorElements = map (mkName . ("x" ++) . show) [1..n]
+        vectorElements = map (mkName . ("v" ++) . show) [1..n]
 
 createVector0 :: FixedVector t 0
 createVector0 = empty
