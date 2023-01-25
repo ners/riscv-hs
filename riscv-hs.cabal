@@ -41,11 +41,14 @@ executable riscv-hs
 test-suite riscv-hs-test
     import:           warnings
     default-language: GHC2021
-    -- other-modules:
+    other-modules:
+      BitSpec,
+      AddersSpec,
+      FixedVectorSpec
     -- other-extensions:
     type:             exitcode-stdio-1.0
     hs-source-dirs:   test
-    main-is:          Main.hs
+    main-is:          Spec.hs
     build-depends:
         base,
         riscv-hs,

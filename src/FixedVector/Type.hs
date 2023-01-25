@@ -5,9 +5,17 @@ module FixedVector.Type where
 
 import GHC.TypeLits
 
+-- TODO thies: write some Haddock documentation for these files / datatypes / functions
+-- it's a special format for writing documentation in code
+-- TODO gennadi: implement Functor
 newtype KnownNat size => FixedVector t size = FixedVector
   { _data :: [t]
-  } deriving (Show)
+  } deriving (Show, Eq)
+
+-- TODO: fromList? IsList?
+
+toList :: KnownNat n => FixedVector t n -> [t]
+toList = _data
 
 empty :: FixedVector t 0
 empty = FixedVector { _data = [] }

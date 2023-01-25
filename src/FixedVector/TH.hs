@@ -67,4 +67,3 @@ createVectorN n =
     decls = []
     vars :: [Name]
     vars = mkName . ("v" ++) . show <$> [1 .. n]
-
