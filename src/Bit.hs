@@ -1,9 +1,14 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
+{- |
+Module      : Bit
+Description : Provides the Bit type and some boolean functions to perform on Bits.
+-}
 module Bit where
 
 import Prelude (Eq, Show, otherwise, (==))
 
+-- |A Bit can be O or I.
 data Bit = O | I deriving (Eq, Show)
 
 not :: Bit -> Bit

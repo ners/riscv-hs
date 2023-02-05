@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-orphans #-}
+
 module BitSpec where
 
 import Prelude hiding (and, not, or)
@@ -6,8 +8,6 @@ import Bit
 import Test.Hspec
 import Test.QuickCheck
 
--- TODO: study what orphan instances are
--- TODO: disable the orphan instance warning in this file
 instance Arbitrary Bit where
   arbitrary = elements [I, O]
 
