@@ -8,7 +8,6 @@ import FixedVector
 import Test.Hspec
 import Test.QuickCheck
 
-
 -- TODO: instance Arbitrary Vector
 
 testSingletonsAreEqual :: Bit -> Bit -> Expectation
@@ -21,7 +20,8 @@ spec = do
   describe "Vector construction" $ do
     it "empty vectors should be equal" $
       empty @Bit `shouldBe` empty @Bit
-    it "singleton vectors with equal elements are equal" $ 
+    it "singleton vectors with equal elements are equal" $
       property testSingletonsAreEqual
-  -- TODO: test that prepending to empty returns singleton
-  -- TODO: test appending
+
+-- TODO: test that prepending to empty returns singleton
+-- TODO: test appending
