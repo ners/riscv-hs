@@ -19,6 +19,7 @@
         packages = ps: [ ps.riscv-hs ];
         buildInputs = with haskellPackages; [
           cabal-install
+          fourmolu
           haskell-language-server
         ];
       };

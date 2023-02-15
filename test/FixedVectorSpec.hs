@@ -7,51 +7,66 @@
 
 module FixedVectorSpec where
 
-import Prelude hiding (not)
-
 import Bit
 import BitSpec ()
 import FixedVector
 import GHC.TypeLits
 import Test.Hspec
 import Test.QuickCheck
+import Prelude hiding (not)
 
 -- Induction base case: 0
-instance Arbitrary t => Arbitrary (FixedVector t 0) where
-  arbitrary = pure empty
+instance Arbitrary t => Arbitrary (FixedVector 0 t) where
+    arbitrary = pure empty
 
 -- Induction step: n -> n + 1
-instance (Arbitrary t, KnownNat m, Arbitrary (FixedVector t m), n ~ (1 + m)) => Arbitrary (FixedVector t n) where
-  arbitrary = prepend <$> arbitrary <*> arbitrary
+instance
+    ( Arbitrary t
+    , KnownNat m
+    , Arbitrary (FixedVector m t)
+    , n ~ (1 + m)
+    )
+    => Arbitrary (FixedVector n t)
+    where
+    arbitrary = prepend <$> arbitrary <*> arbitrary
 
-testSingletonsAreEqual :: Bit -> Bit -> Expectation
+testSingletonsAreEqual :: (Arbitrary t, Eq t, Show t) => t -> t -> Expectation
 testSingletonsAreEqual v w
-  | v == w = singleton v `shouldBe` singleton w
-  | otherwise = singleton v `shouldNotBe` singleton w
+    | v == w = singleton v `shouldBe` singleton w
+    | otherwise = singleton v `shouldNotBe` singleton w
 
-testPrependToEmpty :: Bit -> FixedVector Bit 0 -> Expectation
-testPrependToEmpty v e = prepend v e `shouldBe` singleton v
+testEmptyIsConcatenationUnit :: (Arbitrary t, Eq t, Show t) => t -> FixedVector 0 t -> Expectation
+testEmptyIsConcatenationUnit v e = do
+    prepend v e `shouldBe` singleton v
+    singleton v ++# e `shouldBe` singleton v
+    e ++# singleton v `shouldBe` singleton v
 
-testVectorIsEqualToItself :: KnownNat n => FixedVector Bit n -> Expectation
-testVectorIsEqualToItself v = v `shouldBe` v
-
--- Could not figure out how to use arbitrary vector size without causing stack overflow
-testConcatenation :: FixedVector Bit 32 -> FixedVector Bit 32 -> Expectation
+testConcatenation
+    :: ( KnownNat n
+       , KnownNat m
+       , KnownNat (n + m)
+       , Arbitrary t
+       , Eq t
+       , Show t
+       )
+    => FixedVector n t
+    -> FixedVector m t
+    -> Expectation
 testConcatenation a b = toList (a ++# b) `shouldBe` (toList a ++ toList b)
 
 spec :: Spec
 spec = do
-  describe "Vector construction" $ do
-    it "singleton vectors with equal elements are equal" $
-      property testSingletonsAreEqual
-  describe "Vector equality" $ do
-    it "an empty vector is equal to itself" $ property $ testVectorIsEqualToItself @0
-    it "a singleton vector is equal to itself" $ property $ testVectorIsEqualToItself @1
-    it "a vector of size 2 is equal to itself" $ property $ testVectorIsEqualToItself @2
-    it "a vector of size 4 is equal to itself" $ property $ testVectorIsEqualToItself @4
-  describe "Prepend to empty" $ do
-    it "prepending to an empty vector returns a singleton" $
-      property testPrependToEmpty
-  describe "Vector concatenation" $ do
-    it "The elements of two concatenated vectors are the same as a concatenated list of the elements of both vectors" $
-      property testConcatenation
+    describe "Vector construction" $ do
+        it "singleton vectors with equal elements are equal" $
+            property $
+                testSingletonsAreEqual @Bit
+    describe "Vector concatenation" $ do
+        it "empty vector is unit for concatenation" $
+            property $
+                testEmptyIsConcatenationUnit @Bit
+    describe "Vector concatenation" $ do
+        it "preserves structure" $ property $ testConcatenation @0 @0 @Bit
+        it "preserves structure" $ property $ testConcatenation @1 @1 @Bit
+        it "preserves structure" $ property $ testConcatenation @2 @2 @Bit
+        it "preserves structure" $ property $ testConcatenation @4 @2 @Bit
+        it "preserves structure" $ property $ testConcatenation @2 @4 @Bit

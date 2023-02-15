@@ -9,7 +9,7 @@ import Numeric.Natural (Natural)
 -- import Language.Haskell.TH.Lib
 
 -- create a function that we would have written as follows:
--- createVector<N> :: t -> t -> {N times} -> t -> FixedVector t <N>
+-- createVector<N> :: t -> t -> {N times} -> t -> FixedVector <N> t
 -- createVector<N> v1 v2 {...} v<N> = FixedVector { _data = [ v1, v2, {...}, v<N> ] }
 -- using Template Haskell: https://hackage.haskell.org/package/template-haskell-2.19.0.0/docs/Language-Haskell-TH.html
 -- TODO: don't depend on internals of FixedVector and instead use exposed constructors
@@ -17,53 +17,50 @@ import Numeric.Natural (Natural)
 --       createVector<N> v1 v2 {...} v<N> = prepend v1 $ createVector<N-1> v2 ... v<N>
 createVectorN :: Natural -> DecsQ
 createVectorN n =
-  pure
-    [ SigD functionName functionType
-    , FunD functionName clauses
-    ]
- where
-  -- here we have access to n from `createVector``
-  -- the name of the function we are creating
-  functionName :: Name
-  functionName = mkName $ "createVector" ++ show n
+    pure
+        [ SigD functionName functionType
+        , FunD functionName clauses
+        ]
+  where
+    -- here we have access to n from `createVector``
+    -- the name of the function we are creating
+    functionName :: Name
+    functionName = mkName $ "createVector" ++ show n
 
-  -- The type of elements stored in our vector, which we denote as `t`
-  vectorElementType :: Type
-  vectorElementType = VarT $ mkName "t"
+    -- The type of elements stored in our vector, which we denote as `t`
+    vectorElementType :: Type
+    vectorElementType = VarT $ mkName "t"
 
-  -- ''FixedVector is the Name of the concrete type FixedVector
-  returnType :: Type
-  returnType = ConT ''FixedVector `AppT` vectorElementType `AppT` LitT (NumTyLit $ fromIntegral n)
-  -- alternatively, equivalent:
-  -- returnType = AppT (AppT (ConT ''FixedVector) vectorElementType) (LitT $ NumTyLit n)
-  -- returnType = foldr1 (AppT) [ConT ''FixedVector, vectorElementType, LitT (NumTyLit n)]
+    -- ''FixedVector is the Name of the concrete type FixedVector
+    returnType :: Type
+    returnType = ConT ''FixedVector `AppT` LitT (NumTyLit $ fromIntegral n) `AppT` vectorElementType
 
-  -- create the following expression:
-  -- t -> t -> ... -> t -> t -> FixedVector t n
-  -- in terms of our intermediate functions:
-  -- vectorElementType -> vectorElementType -> ... -> returnType
-  functionType :: Type
-  functionType = iterate (prependTerm vectorElementType) returnType !! fromIntegral n
-   where
-    -- 0th :: returnType
-    -- 1st :: AppT vectorElementType (AppT ArrowT returnType)
-    -- 2nd :: AppT vectorElementType (AppT ArrowT (AppT (vectorElementType) (AppT ArrowT returnType)))
-    -- 3rd :: AppT vectorElementType (AppT ArrowT (AppT vectorElementType (AppT ArrowT (AppT (vectorElementType) (AppT ArrowT returnType)))))
-    -- ... (really boring)
-    -- nth is what we need!
-    prependTerm t u = ArrowT `AppT` t `AppT` u
+    -- create the following expression:
+    -- t -> t -> ... -> t -> t -> FixedVector n t
+    -- in terms of our intermediate functions:
+    -- vectorElementType -> vectorElementType -> ... -> returnType
+    functionType :: Type
+    functionType = iterate (prependTerm vectorElementType) returnType !! fromIntegral n
+      where
+        -- 0th :: returnType
+        -- 1st :: AppT vectorElementType (AppT ArrowT returnType)
+        -- 2nd :: AppT vectorElementType (AppT ArrowT (AppT (vectorElementType) (AppT ArrowT returnType)))
+        -- 3rd :: AppT vectorElementType (AppT ArrowT (AppT vectorElementType (AppT ArrowT (AppT (vectorElementType) (AppT ArrowT returnType)))))
+        -- ... (really boring)
+        -- nth is what we need!
+        prependTerm t u = ArrowT `AppT` t `AppT` u
 
-  -- Documentation:
-  clauses :: [Clause]
-  clauses = [Clause pats body decls]
-   where
-    -- function parameters
-    -- v1 v2 ... v<N>
-    pats = VarP <$> vars
-    -- results in:
-    -- FixedVector { _data = [ v1, v2, ..., v<N> ] }
-    body = NormalB $ RecConE (mkName "FixedVector") [('_data, ListE $ VarE <$> vars)]
-    -- `where` clauses, which we currently don't use
-    decls = []
-    vars :: [Name]
-    vars = mkName . ("v" ++) . show <$> [1 .. n]
+    -- Documentation:
+    clauses :: [Clause]
+    clauses = [Clause pats body decls]
+      where
+        -- function parameters
+        -- v1 v2 ... v<N>
+        pats = VarP <$> vars
+        -- results in:
+        -- FixedVector { _data = [ v1, v2, ..., v<N> ] }
+        body = NormalB $ RecConE (mkName "FixedVector") [('_data, ListE $ VarE <$> vars)]
+        -- `where` clauses, which we currently don't use
+        decls = []
+        vars :: [Name]
+        vars = mkName . ("v" ++) . show <$> [1 .. n]

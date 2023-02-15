@@ -25,8 +25,8 @@ or _ _ = I
 
 xor :: Bit -> Bit -> Bit
 xor x y
-  | x == y = O
-  | otherwise = I
+    | x == y = O
+    | otherwise = I
 
 nand :: Bit -> Bit -> Bit
 nand x y = not (and x y)
