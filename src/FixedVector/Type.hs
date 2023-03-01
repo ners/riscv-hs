@@ -9,7 +9,6 @@ module FixedVector.Type where
 
 import GHC.TypeLits
 import GHC.Generics (Generic)
-import GHC.Exts (IsList(..))
 
 -- |A FixedVector is a list with a type-level size parameter.
 newtype KnownNat size => FixedVector size t = FixedVector
@@ -17,20 +16,17 @@ newtype KnownNat size => FixedVector size t = FixedVector
   }
   deriving newtype (Generic, Show, Eq)
 
-instance IsList (FixedVector n t) where
-  type Item (FixedVector n t) = t
-  -- TODO: what should we do here?
-  fromList _ = undefined
-  toList = elements
+toList :: FixedVector size t -> [t]
+toList = elements
 
 instance Functor (FixedVector n) where
   f `fmap` v = FixedVector { elements = f `fmap` elements v }
 
 -- TODO fricklerhandwerk
-instance Foldable (FixedVector n)
+--instance Foldable (FixedVector n)
 
 -- TODO gennadi
-instance Traversable (FixedVector n)
+--instance Traversable (FixedVector n)
 
 -- TODO can we do Applicative?
 -- for Applicative we would need `pure`, `<*>`
