@@ -18,12 +18,19 @@ common warnings
 
 library
     import:           warnings
-    exposed-modules:  Bits, Adders
-    -- other-modules:
+    exposed-modules:
+        Bit,
+        Adders,
+        FixedVector
+    other-modules:
+        FixedVector.TH,
+        FixedVector.Type,
+        FixedVector.Constructors
     -- other-extensions:
-    build-depends:    base
+    build-depends:    base, template-haskell
     hs-source-dirs:   src
     default-language: GHC2021
+    -- ghc-options: -ddump-splices
 
 executable riscv-hs
     import:           warnings
@@ -40,11 +47,14 @@ executable riscv-hs
 test-suite riscv-hs-test
     import:           warnings
     default-language: GHC2021
-    -- other-modules:
+    other-modules:
+      BitSpec,
+      AddersSpec,
+      FixedVectorSpec
     -- other-extensions:
     type:             exitcode-stdio-1.0
     hs-source-dirs:   test
-    main-is:          Main.hs
+    main-is:          Spec.hs
     build-depends:
         base,
         riscv-hs,

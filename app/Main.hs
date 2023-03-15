@@ -2,9 +2,9 @@
 
 module Main where
 
+import Bit
 import Prelude (IO, print, (==))
 
-import Bits
-
 main :: IO ()
-main = print (nor I I == O) -- should print true
+main = do
+    print (nor I I == O) -- should print true

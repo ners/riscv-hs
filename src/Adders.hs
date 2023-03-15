@@ -2,7 +2,7 @@
 
 module Adders where
 
-import Bits
+import Bit
 
 halfAdder :: Bit -> Bit -> (Bit, Bit)
 halfAdder a b =

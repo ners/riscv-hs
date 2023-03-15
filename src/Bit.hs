@@ -1,9 +1,14 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
-module Bits where
+{- |
+Module      : Bit
+Description : Provides the Bit type and some boolean functions to perform on Bits.
+-}
+module Bit where
 
 import Prelude (Eq, Show, otherwise, (==))
 
+-- |A Bit can be O or I.
 data Bit = O | I deriving (Eq, Show)
 
 not :: Bit -> Bit
@@ -20,8 +25,8 @@ or _ _ = I
 
 xor :: Bit -> Bit -> Bit
 xor x y
-  | x == y = O
-  | otherwise = I
+    | x == y = O
+    | otherwise = I
 
 nand :: Bit -> Bit -> Bit
 nand x y = not (and x y)
