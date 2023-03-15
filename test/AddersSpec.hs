@@ -3,7 +3,6 @@ module AddersSpec where
 import Adders
 import Bit
 import BitSpec ()
-import Control.Monad
 import Prelude hiding (and, not, or)
 import Test.Hspec
 import Test.QuickCheck
