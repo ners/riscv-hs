@@ -24,6 +24,11 @@ empty = FixedVector{elements = []}
 toList :: FixedVector n a -> [a]
 toList = elements
 
+fromNumList :: Num a => [a] -> FixedVector n a
+fromNumList xs = FixedVector{elements = leftPad xs}
+
+fromSemigroupList :: Semigroup a => [a] -> FixedVector n a
+
 -- |singleton creates a FixedVector with a single element
 singleton :: t -> FixedVector 1 t
 singleton v = FixedVector{elements = [v]}

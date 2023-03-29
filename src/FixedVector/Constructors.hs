@@ -23,3 +23,5 @@ createVectorN 8
 createVectorN 16
 
 createVectorN 32
+
+createVectorN 64

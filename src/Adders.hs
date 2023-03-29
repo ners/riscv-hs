@@ -29,4 +29,3 @@ fullAdder a b carryIn =
   let (sum1, carryOut1) = halfAdder a b
       (sum2, carryOut2) = halfAdder carryIn sum1
    in (sum2, or carryOut1 carryOut2)
-
