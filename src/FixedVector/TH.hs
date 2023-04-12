@@ -58,7 +58,8 @@ createVectorN n =
         -- v1 v2 ... v<N>
         pats = VarP <$> vars
         -- results in:
-        -- FixedVector { _data = [ v1, v2, ..., v<N> ] }
+        -- FixedVector { elements = [ v1, v2, ..., v<N> ] }
+        -- singleton v1 ++# singleton v2 ++# ... ++# singleton v<N>
         body = NormalB $ RecConE (mkName "FixedVector") [('elements, ListE $ VarE <$> vars)]
         -- `where` clauses, which we currently don't use
         decls = []

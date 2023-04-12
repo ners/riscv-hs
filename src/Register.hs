@@ -1,7 +1,7 @@
 {-# LANGUAGE DataKinds #-}
 
 module Register where
-import FixedVector (FixedVector, toList)
+import FixedVector (FixedVector(..), toList)
 import Bit (Bit(..))
 import Adders (fullAdder)
 import Prelude hiding (sum)

@@ -3,9 +3,17 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE TypeFamilies #-}
 
--- TODO: hide the constructor of FixedVector
-module FixedVector.Type where
+module FixedVector.Type
+    ( FixedVector
+    , empty
+    , toList
+    , singleton
+    , prepend
+    , (++#)
+    )
+where
 
+import Data.Data (Proxy (Proxy))
 import GHC.Generics (Generic)
 import GHC.TypeLits
 
@@ -24,10 +32,20 @@ empty = FixedVector{elements = []}
 toList :: FixedVector n a -> [a]
 toList = elements
 
-fromNumList :: Num a => [a] -> FixedVector n a
-fromNumList xs = FixedVector{elements = leftPad xs}
+-- | create a FixedVector from a list, if the length of the list matches the desired length of FixedVector.
+tryFromList :: forall a n. (KnownNat n) => [a] -> Maybe (FixedVector n a)
+tryFromList xs
+  | length xs == n = Just FixedVector{ elements = xs }
+  | otherwise = Nothing
+  where
+    n = fromIntegral $ natVal (Proxy @n)
 
-fromSemigroupList :: Semigroup a => [a] -> FixedVector n a
+fromNumList :: forall a n. (Num a, KnownNat n) => [a] -> FixedVector n a
+fromNumList xs = FixedVector{elements = take n (xs <> repeat 0)}
+  where
+    n = fromIntegral $ natVal (Proxy @n)
+
+-- fromSemigroupList :: Semigroup a => [a] -> FixedVector n a
 
 -- |singleton creates a FixedVector with a single element
 singleton :: t -> FixedVector 1 t

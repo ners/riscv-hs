@@ -51,7 +51,8 @@ test-suite riscv-hs-test
     other-modules:
       BitSpec,
       AddersSpec,
-      FixedVectorSpec
+      FixedVectorSpec,
+      RegisterSpec
     -- other-extensions:
     type:             exitcode-stdio-1.0
     hs-source-dirs:   test
