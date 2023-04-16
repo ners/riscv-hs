@@ -1,8 +1,5 @@
 module FixedVector
-    ( module FixedVector.Type
-    , module FixedVector.Constructors
-    )
+    ( module FixedVector.Type)
 where
 
-import FixedVector.Constructors
 import FixedVector.Type

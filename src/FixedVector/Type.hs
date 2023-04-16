@@ -7,6 +7,8 @@ module FixedVector.Type
     ( FixedVector
     , empty
     , toList
+    , tryFromList
+    , fromNumList
     , singleton
     , prepend
     , (++#)
@@ -16,7 +18,6 @@ where
 import Data.Data (Proxy (Proxy))
 import GHC.Generics (Generic)
 import GHC.TypeLits
-
 {- |A FixedVector is a list with a type-level size parameter.
  We cannot derive Applicative or Monad because that would not respect the size parameter.
 -}
