@@ -24,7 +24,6 @@ library
         FixedVector,
         Register
     other-modules:
-        FixedVector.Type,
     -- other-extensions:
     build-depends:    base, template-haskell
     hs-source-dirs:   src
