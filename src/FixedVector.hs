@@ -31,6 +31,7 @@ newtype FixedVector size t = FixedVector
 empty :: FixedVector 0 t
 empty = FixedVector{elements = []}
 
+-- | retrieve the contents of a FixedVector as a list
 toList :: FixedVector n a -> [a]
 toList = elements
 
@@ -42,12 +43,25 @@ tryFromList xs
   where
     n = fromIntegral $ natVal (Proxy @n)
 
-fromNumList :: forall a n. (Num a, KnownNat n) => [a] -> FixedVector n a
-fromNumList xs = FixedVector{elements = take n (xs <> repeat 0)}
+{- | create a FixedVector from a list,
+ | padding missing elements with the given default value, and ignoring surplus elements
+-}
+fromListWithDefault :: forall a n. KnownNat n => a -> [a] -> FixedVector n a
+fromListWithDefault x xs = FixedVector{elements = take n (xs <> repeat x)}
   where
     n = fromIntegral $ natVal (Proxy @n)
 
--- fromSemigroupList :: Semigroup a => [a] -> FixedVector n a
+{- | create a FixedVector from a list of numeric values,
+ | padding missing elements with zeros, and ignoring surplus elements
+-}
+fromNumList :: (Num a, KnownNat n) => [a] -> FixedVector n a
+fromNumList = fromListWithDefault 0
+
+{- | create a FixedVector from a list of monoid values,
+ | padding missing elements with the identity element, and ignoring surplus elements
+-}
+fromMonoidList :: (Monoid a, KnownNat n) => [a] -> FixedVector n a
+fromMonoidList = fromListWithDefault mempty
 
 -- |singleton creates a FixedVector with a single element
 singleton :: t -> FixedVector 1 t
