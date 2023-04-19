@@ -16,9 +16,9 @@ import Bit
 --    => (O, I) -- binary 10
 halfAdder :: Bit -> Bit -> (Bit, Bit)
 halfAdder a b =
-    let sum = xor a b
-        carry = and a b
-     in (sum, carry)
+  let sum = xor a b
+      carry = and a b
+   in (sum, carry)
 
 -- Add two binary digits and a carry-over value, output the least significant bit of the sum and the carry-over value from the addition
 -- Examples:
@@ -26,6 +26,6 @@ halfAdder a b =
 --    => (I, I)
 fullAdder :: Bit -> Bit -> Bit -> (Bit, Bit)
 fullAdder a b carryIn =
-    let (sum1, carryOut1) = halfAdder a b
-        (sum2, carryOut2) = halfAdder carryIn sum1
-     in (sum2, or carryOut1 carryOut2)
+  let (sum1, carryOut1) = halfAdder a b
+      (sum2, carryOut2) = halfAdder carryIn sum1
+   in (sum2, or carryOut1 carryOut2)
