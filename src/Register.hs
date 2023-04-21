@@ -1,12 +1,16 @@
 {-# LANGUAGE DataKinds #-}
 
 module Register where
-import FixedVector (FixedVector(..), toList)
+import FixedVector
 import Bit (Bit(..))
 import Adders (fullAdder)
 import Prelude hiding (sum)
 
 type Register = FixedVector 32 Bit
+
+-- create a Register from a list of Bits, padding missing elements with 0 and ignoring surplus elements
+fromList :: [Bit] -> Register
+fromList = fromListWithDefault O
 
 (+) :: Register -> Register -> (Register, Bit)
 r1 + r2 = (FixedVector{ elements = sum }, overflow)

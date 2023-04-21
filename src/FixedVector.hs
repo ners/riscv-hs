@@ -9,6 +9,7 @@ module FixedVector
     , toList
     , tryFromList
     , fromNumList
+    , fromListWithDefault
     , singleton
     , prepend
     , (++#)
