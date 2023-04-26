@@ -82,3 +82,6 @@ prepend a b = singleton a ++# b
     -> FixedVector n t
     -> FixedVector (m + n) t
 (++#) a b = FixedVector{elements = elements a <> elements b}
+
+zip :: FixedVector n a -> FixedVector n b -> FixedVector n (a, b)
+zip = undefined -- TODO: Jonas
