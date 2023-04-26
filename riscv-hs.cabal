@@ -21,11 +21,9 @@ library
     exposed-modules:
         Bit,
         Adders,
-        FixedVector
+        FixedVector,
+        Register
     other-modules:
-        FixedVector.TH,
-        FixedVector.Type,
-        FixedVector.Constructors
     -- other-extensions:
     build-depends:    base, template-haskell
     hs-source-dirs:   src
