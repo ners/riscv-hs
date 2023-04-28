@@ -17,7 +17,7 @@ not :: Register -> Register
 not = fmap Bit.not
 
 and :: Register -> Register -> Register
-and x y = undefined -- TODO: Thies, use `zip`, `fmap`, and `uncurry`
+and x y = fromList (fmap (uncurry Bit.and) (zip (toList x) (toList y)))
 
 -- or :: Register -> Register -> Register
 --
