@@ -4,8 +4,10 @@ module Register where
 
 import Bit (Bit (..))
 import Bit qualified
-import FixedVector
-import Prelude hiding (sum)
+import FixedVector (FixedVector (..)
+                    , fromListWithDefault)
+import FixedVector qualified
+import Prelude hiding (zipWith)
 
 type Register = FixedVector 32 Bit
 
@@ -13,26 +15,29 @@ type Register = FixedVector 32 Bit
 fromList :: [Bit] -> Register
 fromList = fromListWithDefault O
 
+zipWith :: (Bit -> Bit -> Bit) -> (Register -> Register -> Register)
+zipWith f = FixedVector.zipWith f O
+
 not :: Register -> Register
 not = fmap Bit.not
 
 and :: Register -> Register -> Register
-and x y = fromList (uncurry Bit.and `fmap` zip (toList x) (toList y))
+and = zipWith Bit.and
 
 or :: Register -> Register -> Register
-or x y = fromList (uncurry Bit.or `fmap` zip (toList x) (toList y))
+or = zipWith Bit.or
 
 xor :: Register -> Register -> Register
-xor x y = fromList (uncurry Bit.xor `fmap` zip (toList x) (toList y))
+xor = zipWith Bit.xor
 
 nand :: Register -> Register -> Register
-nand x y = fromList (uncurry Bit.nand `fmap` zip (toList x) (toList y))
+nand = zipWith Bit.nand
 
 nor :: Register -> Register -> Register
-nor x y = fromList (uncurry Bit.nor `fmap` zip (toList x) (toList y))
+nor = zipWith Bit.nor
 
 xnor :: Register -> Register -> Register
-xnor x y = fromList (uncurry Bit.xnor `fmap` zip (toList x) (toList y))
+xnor = zipWith Bit.xnor
 
 implies :: Register -> Register -> Register
-implies x y = fromList (uncurry Bit.implies `fmap` zip (toList x) (toList y))
+implies = zipWith Bit.implies

@@ -13,6 +13,7 @@ module FixedVector
     , singleton
     , prepend
     , (++#)
+    , FixedVector.zipWith
     )
 where
 
@@ -83,5 +84,8 @@ prepend a b = singleton a ++# b
     -> FixedVector (m + n) t
 (++#) a b = FixedVector{elements = elements a <> elements b}
 
-zip :: FixedVector n a -> FixedVector n b -> FixedVector n (a, b)
-zip = undefined -- TODO: Jonas
+zipWith :: KnownNat n => (a -> b -> c) -> c -> FixedVector n a -> FixedVector n b -> FixedVector n c
+zipWith f a x y = fromListWithDefault a $ uncurry f <$> zip (toList x) (toList y)
+
+-- zip :: FixedVector n a -> FixedVector n b -> FixedVector n (a, b)
+-- zip = undefined -- TODO: Jonas
