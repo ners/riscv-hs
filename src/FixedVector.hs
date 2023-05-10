@@ -10,13 +10,16 @@ module FixedVector
     , tryFromList
     , fromNumList
     , fromListWithDefault
+    , unsafeFromList
     , singleton
     , prepend
     , (++#)
+    , FixedVector.zipWith
     )
 where
 
 import Data.Data (Proxy (Proxy))
+import Data.Maybe (fromMaybe)
 import GHC.Generics (Generic)
 import GHC.TypeLits
 
@@ -43,6 +46,10 @@ tryFromList xs
     | otherwise = Nothing
   where
     n = fromIntegral $ natVal (Proxy @n)
+
+-- | TODO: thies
+unsafeFromList :: forall a n. (KnownNat n) => [a] -> FixedVector n a
+unsafeFromList = fromMaybe (error "unsafeFromList: wrong length of list given") . tryFromList
 
 {- | create a FixedVector from a list,
  | padding missing elements with the given default value, and ignoring surplus elements
@@ -83,5 +90,5 @@ prepend a b = singleton a ++# b
     -> FixedVector (m + n) t
 (++#) a b = FixedVector{elements = elements a <> elements b}
 
-zip :: FixedVector n a -> FixedVector n b -> FixedVector n (a, b)
-zip = undefined -- TODO: Jonas
+zipWith :: KnownNat n => (a -> b -> c) -> FixedVector n a -> FixedVector n b -> FixedVector n c
+zipWith f as bs = unsafeFromList $ Prelude.zipWith f (toList as) (toList bs)
