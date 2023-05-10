@@ -4,10 +4,11 @@ module Register where
 
 import Bit (Bit (..))
 import Bit qualified
-import FixedVector (FixedVector (..)
-                    , fromListWithDefault)
+import FixedVector
+    ( FixedVector (..)
+    , fromListWithDefault
+    )
 import FixedVector qualified
-import Prelude hiding (zipWith)
 
 type Register = FixedVector 32 Bit
 
@@ -15,29 +16,26 @@ type Register = FixedVector 32 Bit
 fromList :: [Bit] -> Register
 fromList = fromListWithDefault O
 
-zipWith :: (Bit -> Bit -> Bit) -> (Register -> Register -> Register)
-zipWith f = FixedVector.zipWith f O
-
 not :: Register -> Register
 not = fmap Bit.not
 
 and :: Register -> Register -> Register
-and = zipWith Bit.and
+and = FixedVector.zipWith Bit.and
 
 or :: Register -> Register -> Register
-or = zipWith Bit.or
+or = FixedVector.zipWith Bit.or
 
 xor :: Register -> Register -> Register
-xor = zipWith Bit.xor
+xor = FixedVector.zipWith Bit.xor
 
 nand :: Register -> Register -> Register
-nand = zipWith Bit.nand
+nand = FixedVector.zipWith Bit.nand
 
 nor :: Register -> Register -> Register
-nor = zipWith Bit.nor
+nor = FixedVector.zipWith Bit.nor
 
 xnor :: Register -> Register -> Register
-xnor = zipWith Bit.xnor
+xnor = FixedVector.zipWith Bit.xnor
 
 implies :: Register -> Register -> Register
-implies = zipWith Bit.implies
+implies = FixedVector.zipWith Bit.implies
