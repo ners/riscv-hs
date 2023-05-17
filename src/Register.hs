@@ -7,35 +7,38 @@ import Bit qualified
 import FixedVector
     ( FixedVector (..)
     , fromListWithDefault
+    , toList
     )
 import FixedVector qualified
+import GHC.TypeLits
 
-type Register = FixedVector 32 Bit
+type Register n = FixedVector n Bit
 
--- create a Register from a list of Bits, padding missing elements with 0 and ignoring surplus elements
-fromList :: [Bit] -> Register
+-- create a Register n from a list of Bits, padding missing elements with 0 and ignoring surplus elements
+fromList :: KnownNat n => [Bit] -> Register n
 fromList = fromListWithDefault O
 
-not :: Register -> Register
+not :: KnownNat n => Register n -> Register n
 not = fmap Bit.not
 
-and :: Register -> Register -> Register
+and :: KnownNat n => Register n -> Register n -> Register n
 and = FixedVector.zipWith Bit.and
 
-or :: Register -> Register -> Register
+or :: KnownNat n => Register n -> Register n -> Register n
 or = FixedVector.zipWith Bit.or
 
-xor :: Register -> Register -> Register
+xor :: KnownNat n => Register n -> Register n -> Register n
 xor = FixedVector.zipWith Bit.xor
 
-nand :: Register -> Register -> Register
+nand :: KnownNat n => Register n -> Register n -> Register n
 nand = FixedVector.zipWith Bit.nand
 
-nor :: Register -> Register -> Register
+nor :: KnownNat n => Register n -> Register n -> Register n
 nor = FixedVector.zipWith Bit.nor
 
-xnor :: Register -> Register -> Register
+xnor :: KnownNat n => Register n -> Register n -> Register n
 xnor = FixedVector.zipWith Bit.xnor
 
-implies :: Register -> Register -> Register
+implies :: KnownNat n => Register n -> Register n -> Register n
 implies = FixedVector.zipWith Bit.implies
+
