@@ -6,10 +6,10 @@ Description : Provides the Bit type and some boolean functions to perform on Bit
 -}
 module Bit where
 
-import Prelude (Eq, Show, otherwise, (==))
+import Prelude (Eq, Show, otherwise, (==), Enum)
 
 -- |A Bit can be O or I.
-data Bit = O | I deriving (Eq, Show)
+data Bit = O | I deriving (Eq, Show, Enum)
 
 not :: Bit -> Bit
 not O = I
