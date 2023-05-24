@@ -15,6 +15,8 @@ module FixedVector
     , prepend
     , (++#)
     , FixedVector.zipWith
+    , FixedVector.unzip
+    , FixedVector.zip
     )
 where
 
@@ -94,3 +96,9 @@ zipWith f as bs = unsafeFromList $ Prelude.zipWith f (toList as) (toList bs)
 
 zip :: KnownNat n => FixedVector n a -> FixedVector n b -> FixedVector n (a, b)
 zip = FixedVector.zipWith (,)
+
+unzip :: KnownNat n => FixedVector n (a, b) -> (FixedVector n a, FixedVector n b)
+unzip r = (fst <$> r, snd <$> r)
+
+rotate :: KnownNat n => Int -> FixedVector n a -> FixedVector n a
+rotate = error "TODO(gennadi): implement rotate"
