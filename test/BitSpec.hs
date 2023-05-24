@@ -8,7 +8,7 @@ import Test.QuickCheck
 import Prelude hiding (and, not, or)
 
 instance Arbitrary Bit where
-    arbitrary = elements [I, O]
+    arbitrary = elements [O, I]
 
 testNotIdentity :: Bit -> Expectation
 testNotIdentity x = not (not x) `shouldBe` x
