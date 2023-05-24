@@ -7,7 +7,6 @@ import Bit qualified
 import FixedVector
     ( FixedVector (..)
     , fromListWithDefault
-    , toList
     )
 import FixedVector qualified
 import GHC.TypeLits
@@ -41,4 +40,3 @@ xnor = FixedVector.zipWith Bit.xnor
 
 implies :: KnownNat n => Register n -> Register n -> Register n
 implies = FixedVector.zipWith Bit.implies
-

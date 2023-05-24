@@ -47,7 +47,6 @@ tryFromList xs
   where
     n = fromIntegral $ natVal (Proxy @n)
 
--- | TODO: thies
 unsafeFromList :: forall a n. (KnownNat n) => [a] -> FixedVector n a
 unsafeFromList = fromMaybe (error "unsafeFromList: wrong length of list given") . tryFromList
 
@@ -93,5 +92,5 @@ prepend a b = singleton a ++# b
 zipWith :: KnownNat n => (a -> b -> c) -> FixedVector n a -> FixedVector n b -> FixedVector n c
 zipWith f as bs = unsafeFromList $ Prelude.zipWith f (toList as) (toList bs)
 
-zip :: KnownNat n => FixedVector n a -> FixedVector n b -> FixedVector n (a,b)
+zip :: KnownNat n => FixedVector n a -> FixedVector n b -> FixedVector n (a, b)
 zip = FixedVector.zipWith (,)
