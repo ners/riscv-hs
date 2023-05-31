@@ -100,5 +100,7 @@ zip = FixedVector.zipWith (,)
 unzip :: KnownNat n => FixedVector n (a, b) -> (FixedVector n a, FixedVector n b)
 unzip r = (fst <$> r, snd <$> r)
 
-rotate :: KnownNat n => Int -> FixedVector n a -> FixedVector n a
-rotate = error "TODO(gennadi): implement rotate"
+rotate :: forall n a. KnownNat n => Int -> FixedVector n a -> FixedVector n a
+rotate k vec = unsafeFromList $ take n $ drop (k `mod` n) (cycle . toList $ vec)
+  where
+    n = fromIntegral $ natVal (Proxy @n)
