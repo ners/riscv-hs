@@ -17,6 +17,7 @@ module FixedVector
     , FixedVector.zipWith
     , FixedVector.unzip
     , FixedVector.zip
+    , rotate
     )
 where
 

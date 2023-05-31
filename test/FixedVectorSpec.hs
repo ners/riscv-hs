@@ -9,6 +9,8 @@ module FixedVectorSpec where
 
 import Bit
 import BitSpec ()
+import Control.Monad (when)
+import Data.Proxy (Proxy (..))
 import FixedVector
 import GHC.TypeLits
 import Test.Hspec
@@ -54,19 +56,28 @@ testConcatenation
     -> Expectation
 testConcatenation a b = toList (a ++# b) `shouldBe` (toList a ++ toList b)
 
+testRotate :: forall n t. (KnownNat n, Arbitrary t, Eq t, Show t) => Int -> FixedVector n t -> Expectation
+testRotate k v = do
+    when (n /= 0 && k `mod` n == 0) $ rotate k v `shouldBe` v
+    when (n == 0) $ rotate k v `shouldBe` v
+    rotate (-k) (rotate k v) `shouldBe` v
+  where
+    n = fromIntegral $ natVal (Proxy @n)
+
 spec :: Spec
 spec = do
-    describe "Vector construction" $ do
-        it "singleton vectors with equal elements are equal" $
-            property $
-                testSingletonsAreEqual @Bit
-    describe "Vector concatenation" $ do
-        it "empty vector is unit for concatenation" $
-            property $
-                testEmptyIsConcatenationUnit @Bit
-    describe "Vector concatenation" $ do
+    describe "construction" $ do
+        it "preserves equality of singletons" $ property $ testSingletonsAreEqual @Bit
+    describe "concatenation" $ do
+        it "has unit" $ property $ testEmptyIsConcatenationUnit @Bit
+    describe "concatenation" $ do
         it "preserves structure" $ property $ testConcatenation @0 @0 @Bit
         it "preserves structure" $ property $ testConcatenation @1 @1 @Bit
         it "preserves structure" $ property $ testConcatenation @2 @2 @Bit
         it "preserves structure" $ property $ testConcatenation @4 @2 @Bit
         it "preserves structure" $ property $ testConcatenation @2 @4 @Bit
+    describe "rotation" $ do
+        it "is cyclic and symmetric" $ property $ testRotate @0 @Bit
+        it "is cyclic and symmetric" $ property $ testRotate @1 @Bit
+        it "is cyclic and symmetric" $ property $ testRotate @2 @Bit
+        it "is cyclic and symmetric" $ property $ testRotate @4 @Bit
